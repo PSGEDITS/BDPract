@@ -1,0 +1,109 @@
+PRACTICAL NO : 5
+Apriori Algorithm (PBL)
+Aim: Implement Apriori Algorithm Recommending grocery items to a customer that is most
+frequently bought together, given a data set of transactions by customers of a store, using builtin Groceries file.
+
+-------------code copy ----------------------
+# Step 1: Install Required Packages
+install.packages("viridis")
+install.packages("arules")
+install.packages("arulesViz")
+install.packages("RColorBrewer")
+
+# Step 2: Load the Required Packages
+library(arules)
+library(arulesViz)
+library(RColorBrewer)
+library(arulesViz)
+
+# Step 3: Load the Groceries dataset
+data("Groceries")
+
+# Step 4: Explore the Groceries dataset
+summary(Groceries)
+class(Groceries)
+
+# Step 5: Generate association rules using Apriori algorithm
+rules <- apriori(Groceries, parameter = list(supp = 0.02, conf = 0.2))
+summary(rules)
+inspect(rules[1:10])
+
+# Step 6: Visualize item frequency plot
+arules::itemFrequencyPlot(Groceries, topN = 20,
+                          col = brewer.pal(8, 'Pastel2'),
+                          main = 'Relative Item Frequency Plot',
+                          type = "relative",
+                          ylab = "Item Frequency (Relative)")
+
+# Step 7: Generate frequent itemsets of length 2
+itemsets <- apriori(Groceries, parameter = list(minlen = 2, maxlen = 2, support = 0.02, target = "frequent itemsets"))
+summary(itemsets)
+inspect(itemsets[1:10])
+
+# Step 8: Generate frequent itemsets of length 3
+itemsets_3 <- apriori(Groceries, parameter = list(minlen = 3, maxlen = 3, support = 0.02, target = "frequent itemsets"))
+summary(itemsets_3)
+inspect(itemsets_3)
+
+-------------code copy ----------------------
+
+
+Note: make use of install.packages("vctrs",dependencies = TRUE) and library(vctrs) in case
+of any error in installing any packages.
+transactions in sparse format with
+9835 transactions (rows) and
+169 items (columns)
+
+transactions in sparse format with
+9835 transactions (rows) and
+169 items (columns)
+
+transactions as itemMatrix in sparse format with
+9835 rows (elements/itemsets/transactions) and
+169 columns (items) and a density of 0.02609146
+
+ support confidence coverage lift
+Min. :0.02003 Min. :0.2006 Min. :0.04342 Min. :0.8991
+1st Qu.:0.02257 1st Qu.:0.2369 1st Qu.:0.07168 1st Qu.:1.3112
+Median :0.02664 Median :0.3079 Median :0.09395 Median :1.5570
+Mean :0.03424 Mean :0.3187 Mean :0.11739 Mean :1.6061 
+
+3rd Qu.:0.03589 3rd Qu.:0.3868 3rd Qu.:0.11052 3rd Qu.:1.8502
+Max. :0.25552 Max. :0.5129 Max. :1.00000 Max. :2.8421
+
+ items support count
+[1] {whole milk, frozen vegetables} 0.02043721 201
+[2] {beef, whole milk} 0.02125064 209
+[3] {whole milk, curd} 0.02613116 257
+[4] {pork, other vegetables} 0.02165735 213
+[5] {pork, whole milk} 0.02216573 218
+[6] {frankfurter, whole milk} 0.02053889 202
+[7] {whole milk, bottled beer} 0.02043721 201
+[8] {whole milk, brown bread} 0.02521607 248
+[9] {whole milk, margarine} 0.02419929 238
+[10] {other vegetables, butter} 0.02003050 197
+
+Min. 1st Qu. Median Mean 3rd Qu. Max.
+ 3 3 3 3 3 3
+
+summary of quality measures:
+ support count
+Min. :0.02227 Min. :219.0
+1st Qu.:0.02250 1st Qu.:221.2
+Median :0.02272 Median :223.5
+Mean :0.02272 Mean :223.5
+3rd Qu.:0.02295 3rd Qu.:225.8
+Max. :0.02318 Max. :228.0
+
+includes transaction ID lists: FALSE
+mining info:
+ data ntransactions support confidence
+Groceries 9835 0.02 1
+
+call
+apriori(data = Groceries, parameter = list(minlen = 3, maxlen = 3, suppor
+t = 0.02, target = "frequent itemset"))
+> inspect(itemsets_3)
+ items support count
+[1] {root vegetables, other vegetables, whole milk} 0.02318251 228
+[2] {other vegetables, whole milk, yogurt} 0.02226741 219

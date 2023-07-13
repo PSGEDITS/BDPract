@@ -1,0 +1,63 @@
+PRACTICAL NO : 10
+Text Analysis (PBL)
+Aim:
+b) Find the confusion matrix to find restaurant review based of sentiment analysis of Natural
+Language processing. Use Resaurentreviews.tsv file for your study.
+
+
+
+# Sentiment Analysis - Restaurant Reviews
+
+# Load required packages
+install.packages("tm")
+install.packages("SnowballC")
+install.packages("caTools")
+install.packages("randomForest")
+library(tm)
+library(SnowballC)
+library(caTools)
+library(randomForest)
+
+# Import the dataset
+dataset_original <- read.delim("C:/Users/PSG/Downloads/Restaurant_Reviews.tsv",
+                               quote = "",
+                               stringsAsFactors = FALSE)
+
+# Preprocess the text data
+corpus <- Corpus(VectorSource(dataset_original$Review))
+corpus <- tm_map(corpus, content_transformer(tolower))
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeWords, stopwords())
+corpus <- tm_map(corpus, stemDocument)
+corpus <- tm_map(corpus, stripWhitespace)
+
+# Create the Document-Term Matrix
+dtm <- DocumentTermMatrix(corpus)
+dtm <- removeSparseTerms(dtm, 0.999)
+
+# Create the final dataset
+dataset <- as.data.frame(as.matrix(dtm))
+dataset$Liked <- dataset_original$Liked
+dataset$Liked <- factor(dataset$Liked, levels = c(0, 1))
+print(dataset$Liked)
+
+# Split the dataset into the Training set and Test set
+set.seed(123)
+split <- sample.split(dataset$Liked, SplitRatio = 0.8)
+training_set <- subset(dataset, split == TRUE)
+test_set <- subset(dataset, split == FALSE)
+
+# Train the Random Forest model
+classifier <- randomForest(x = training_set[, -ncol(training_set)],
+                           y = training_set$Liked,
+                           ntree = 10)
+
+# Predict the sentiment on the Test set
+y_pred <- predict(classifier, newdata = test_set[, -ncol(test_set)])
+
+# Create the Confusion Matrix
+cm <- table(test_set$Liked, y_pred)
+print(cm)
+
+

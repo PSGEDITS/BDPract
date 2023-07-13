@@ -1,0 +1,65 @@
+K-Means Clustering
+Aim:
+a) Clustering algorithms for unsupervised classification. Read a datafile Mall_Customers.csv
+and apply k-means clustering. Plot the cluster data using R visualizations.
+# K-Means Clustering
+
+
+-------------------------copy code--------------------
+# Step 1: Install Required Packages
+install.packages("tidyverse")
+install.packages("cluster")
+
+# Step 2: Load the Required Packages
+library(tidyverse)
+library(cluster)
+
+# Step 3: Read the Data
+dataset <- read.csv("C:/Users/PSG/Downloads/Mall_Customers.csv")
+head(dataset)
+dataset <- dataset[, 4:5]
+head(dataset)
+
+# Step 4: Calculate WSS for different number of clusters
+wcss <- vector()
+for (i in 1:10) {
+  wcss[i] <- sum(kmeans(dataset, i)$withinss)
+}
+
+# Step 5: Plot the Elbow Method
+plot(1:10,
+     wcss,
+     type = 'b',
+     main = 'The Elbow Method',
+     xlab = 'Number of clusters',
+     ylab = 'WSS')
+
+# Step 6: Perform K-Means with 5 clusters
+kmeans_model <- kmeans(dataset, centers = 5)
+y_kmeans <- kmeans_model$cluster
+
+# Step 7: Visualize the clusters
+clusplot(dataset,
+         y_kmeans,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 2,
+         main = 'Clusters of customers',
+         xlab = 'Annual Income',
+         ylab = 'Spending Score')
+
+-------------------------copy code--------------------
+
+
+
+
+
+OutPut :
+CustomerID Gender Age Annual.Income..k.. Spending.Score..1.100.
+1 1 Male 19 15 39
+2 2 Male 21 15 81
+3 3 Female 20 16 6
+4 4 Female 23 16 77
+5 5 Female 31 17 40
+6 6 Female 22 17 76

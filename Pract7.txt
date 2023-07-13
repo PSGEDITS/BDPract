@@ -1,0 +1,35 @@
+Multiple Regression
+Aim:
+b) Apply multiple regressions, if data have a continuous independent variable. Apply on
+above dataset – binary.csv.
+
+
+----------------copy code------------
+# Fetch the data
+college - read.csv(CUsersPSGDownloadsbinary.csv)
+head(college)
+nrow(college)
+
+# Install required packages
+install.packages(caTools)  # For Logistic regression
+library(caTools)
+
+# Split the data into training and test sets
+set.seed(123)  # Set seed for reproducibility
+split - sample.split(college$admit, SplitRatio = 0.75)
+training_reg - subset(college, split == TRUE)
+test_reg - subset(college, split == FALSE)
+
+# Training model
+fit_MRegressor_model - lm(admit ~ gre + gpa + rank, data = training_reg)
+
+# Predict test data based on the model
+predict_reg - predict(fit_MRegressor_model, newdata = test_reg)
+predict_reg
+
+# Visualize the relationship between variables and admission
+cdplot(as.factor(admit) ~ gpa, data = college)
+cdplot(as.factor(admit) ~ gre, data = college)
+cdplot(as.factor(admit) ~ rank, data = college)
+
+----------------copy code------------
