@@ -1,4 +1,4 @@
-xtPRACTICAL NO : 1
+PRACTICAL NO : 1
 Aim:
 Install, configure and run Hadoop and HDFS and explore HDFS on Windows
 Code:
